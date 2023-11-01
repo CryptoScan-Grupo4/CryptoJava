@@ -11,6 +11,7 @@ dataEmitida timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 INSERT INTO Token (token) VALUES
 	('123');
 
+
 CREATE TABLE Empresa (
 idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
 nomeEmpresa VARCHAR(45),
@@ -51,107 +52,91 @@ PRIMARY KEY(idFuncionario, fkTipoConta)
 INSERT INTO Funcionario (nomeFuncionario, emailFuncionario, Senha, fkEmpresa ,fkTipoConta) VALUES
 	('Lucas Santos' , 'lucas@email.com', '123', 1  , 1),
 	('Hamilton Silva' , 'hamilton@email.com' , '123' , 1 , 2);
-    
-SELECT emailFuncionario, senha FROM Funcionario JOIN tipoConta
-ON fkTipoConta = idTipoConta;
+
 
 CREATE TABLE Setor (
 idSetor INT AUTO_INCREMENT,
 Andar VARCHAR(45),
 fkEmpresa INT,
+fkFuncionarioResponsavel INT,
+FOREIGN KEY (fkFuncionarioResponsavel) REFERENCES Funcionario(idFuncionario),
 FOREIGN KEY (fkEmpresa) REFERENCES Empresa(idEmpresa),
-PRIMARY KEY(idSetor, fkEmpresa)
+PRIMARY KEY(idSetor, fkEmpresa)	
 );
 
 INSERT INTO Setor VALUES 
-	(NULL, '3' , 1),
-	(NULL, '4' , 1),
-	(NULL, '5' , 1);
+	(NULL, '3' , 1, 1),
+	(NULL, '4' , 1, NULL),
+	(NULL, '5' , 1, NULL);
     
-    SELECT * FROM Setor;
+
 
 CREATE TABLE Computador(
 idComputador INT AUTO_INCREMENT,
+serialComputador VARCHAR(45),
+statusAtividade VARCHAR(10),
+fkEmpresa INT,
 fkSetor INT,
+FOREIGN KEY (fkEmpresa) REFERENCES Empresa(idEmpresa),
 FOREIGN KEY (fkSetor) REFERENCES Setor(idSetor),
-PRIMARY KEY (idComputador, fkSetor),
-fkFuncionarioResponsavel INT,
-FOREIGN KEY (fkFuncionarioResponsavel) REFERENCES Funcionario(idFuncionario),
-fkTipoConta INT,
-FOREIGN KEY (fkTipoConta) REFERENCES TipoConta(idTipoConta),
- serialComputador VARCHAR(45)
+PRIMARY KEY (idComputador, fkEmpresa)
 );
 
 INSERT INTO Computador VALUES 
-	(NULL, 1 , 1 , 1 , '455'),
-	(NULL, 1 , 1 , 1 , '244'),
-	(NULL, 1 , 1 , 1 , '255');
+	(NULL, '455' , 'On'  , 1, 1),
+	(NULL, '244',  'Off' , 1, 1),
+	(NULL, '255',  'Off' , 1, 1);
+    
 
-
-CREATE TABLE Componente(
-idComponente INT PRIMARY KEY auto_increment,
-modeloComponente VARCHAR(45),
-tipoComponente VARCHAR(45),
-serialComponente VARCHAR(45)
-);
-
-
-INSERT INTO Componente (modeloComponente, tipoComponente, serialComponente) VALUES
-	('Intel I9' , 'Processador' , '457' ),
-	('Fury DDR5 32GB' , 'Memoria RAM' , '427' ),
-	('Fury DDR5 32GB' , 'Memoria RAM' , '417' ),
-	('HD Seagate' , 'HD' , '407' ),
-    ('Asus A520M'  , 'Placa mãe' , '477' );
-
-SELECT * FROM Componente;
-
-SELECT * FROM Setup WHERE(SELECT serialComputador FROM Computador WHERE serialComputador = "455");
-
--- Associativa
 CREATE TABLE Setup(
 idSetup INT AUTO_INCREMENT,
 fkComputador INT,
-fkComponente INT,
-fkSetor INT,
-StatuSetup VARCHAR(20),
-PRIMARY KEY (idSetup, fkComponente, fkComputador, fkSetor),
-FOREIGN KEY (fkComputador) REFERENCES Computador(idComputador),
-FOREIGN KEY (fkComponente) REFERENCES Componente(idComponente),
-FOREIGN KEY (fkSetor) REFERENCES Setor(idSetor)
+dataCriacao timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (idSetup, fkComputador),
+FOREIGN KEY (fkComputador) REFERENCES Computador(idComputador)
 );
 
-select * from Setup;
-
-INSERT INTO Setup VALUES
-	(NULL , 1 , 1 , 1, 'Ativo'),
-	(NULL , 1 , 2 , 1, 'Ativo'),
-	(NULL , 1 , 3 , 1, 'Ativo'),
-	(NULL , 1 , 4 , 1, 'Ativo'),
-	(NULL , 1 , 5 , 1, 'Ativo');
+INSERT INTO Setup (idSetup , fkComputador) VALUES
+	(NULL , 1),
+	(NULL , 1),
+	(NULL , 1),
+	(NULL , 1);
     
+
+CREATE TABLE Componente(
+idComponente INT PRIMARY KEY auto_increment,
+nomeModelo VARCHAR(45),
+modeloComponente VARCHAR(45),
+tipoComponente VARCHAR(45),
+unidadeMedida VARCHAR(45),
+fkSetup INT,
+FOREIGN KEY (fkSetup) REFERENCES Setup(idSetup)
+);
+
+INSERT INTO Componente (nomeModelo, modeloComponente, tipoComponente, unidadeMedida, fkSetup) VALUES
+	('Intel',  'I9' , 'Processador' , 'Porcentagem' , 1 ),
+	('Fury', 'DDR5 32GB' , 'Memoria RAM' , 'Porcentagem' , 1 ),
+	('Fury' , 'DDR5 32GB' , 'Memoria RAM' , 'Porcentagem' , 1 ),
+	('HD' , 'Seagate' , 'HD' , 'Porcentagem' , 1 );
+    
+CREATE TABLE LimeteComponente (
+idLimite INT AUTO_INCREMENT,
+min FLOAT,
+max FLOAT,
+fkComponente INT,
+FOREIGN KEY (fkComponente) REFERENCES componente (idComponente),
+PRIMARY KEY (idLimite , fkComponente)
+);
+
 
 CREATE TABLE Medida(
 idMedida INT AUTO_INCREMENT,
-usoProcessador FLOAT,
-usoRam FLOAT,
-usoDisco FLOAT,
-dataMedida timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-unidadeMedida VARCHAR(45),
+medida FLOAT,
+dataHoraMedida timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+fkComponente INT,
 fkSetup INT,
-PRIMARY KEY(idMedida,fkSetup),
-FOREIGN KEY (fkSetup) REFERENCES Setup(idSetup)
+FOREIGN KEY (fkComponente) REFERENCES Componente(idComponente),
+FOREIGN KEY (fkSetup) REFERENCES Setup(idSetup),
+PRIMARY KEY(idMedida,fkComponente, fkSetup)
 );
-SELECT usoProcessador, usoRam, usoDisco FROM Medida WHERE fkSetup = 6;
-select * from medida;
-
-SELECT idComputador, serialComputador AS 'Codigo do computador' FROM Computador;
-
-SELECT * FROM Setup WHERE(SELECT serialComputador FROM Computador WHERE serialComputador = "455"); 
-
-SELECT idSetup FROM Setup WHERE (SELECT * FROM Medida);
-
-SELECT * FROM Setup WHERE idSetup = 6;
-
-SELECT * FROM Medida WHERE (SELECT idSetup FROM Setup WHERE idSetup = 6);
-
 
