@@ -1,6 +1,5 @@
 CREATE DATABASE CryptoScan;
 USE CryptoScan;
--- DROP DATABASE CryptoScan;
 
 CREATE TABLE Token (
 idToken INT PRIMARY KEY AUTO_INCREMENT,
@@ -70,7 +69,6 @@ INSERT INTO Setor VALUES
 	(NULL, '5' , 1, NULL);
     
 
-
 CREATE TABLE Computador(
 idComputador INT AUTO_INCREMENT,
 serialComputador VARCHAR(45),
@@ -87,7 +85,6 @@ INSERT INTO Computador VALUES
 	(NULL, '244',  'Off' , 1, 1),
 	(NULL, '255',  'Off' , 1, 1);
     
-
 CREATE TABLE Setup(
 idSetup INT AUTO_INCREMENT,
 fkComputador INT,
@@ -102,32 +99,32 @@ INSERT INTO Setup (idSetup , fkComputador) VALUES
 	(NULL , 1),
 	(NULL , 1);
     
-
 CREATE TABLE Componente(
 idComponente INT PRIMARY KEY auto_increment,
 nomeModelo VARCHAR(45),
 modeloComponente VARCHAR(45),
 tipoComponente VARCHAR(45),
-unidadeMedida VARCHAR(45),
 fkSetup INT,
 FOREIGN KEY (fkSetup) REFERENCES Setup(idSetup)
 );
 
-INSERT INTO Componente (nomeModelo, modeloComponente, tipoComponente, unidadeMedida, fkSetup) VALUES
-	('Intel',  'I9' , 'Processador' , 'Porcentagem' , 1 ),
-	('Fury', 'DDR5 32GB' , 'Memoria RAM' , 'Porcentagem' , 1 ),
-	('Fury' , 'DDR5 32GB' , 'Memoria RAM' , 'Porcentagem' , 1 ),
-	('HD' , 'Seagate' , 'HD' , 'Porcentagem' , 1 );
+INSERT INTO Componente (nomeModelo, modeloComponente, tipoComponente, fkSetup) VALUES
+	('Intel',  'I9' , 'Processador' , 1 ),
+	('Fury', 'DDR5 32GB' , 'Memoria RAM' , 1 ),
+	('Fury' , 'DDR5 32GB' , 'Memoria RAM' , 1 ),
+	('HD' , 'Seagate' , 'HD' , 1 ),
+	('Internet' , NULL , 'Internet' , 1 );
     
-CREATE TABLE LimeteComponente (
-idLimite INT AUTO_INCREMENT,
-min FLOAT,
-max FLOAT,
+    
+    
+CREATE TABLE UnidadeComponente(
+idUnidadeComponente INT AUTO_INCREMENT,
+unidadeComponente VARCHAR(45),
+totalComponente FLOAT,
 fkComponente INT,
 FOREIGN KEY (fkComponente) REFERENCES componente (idComponente),
 PRIMARY KEY (idLimite , fkComponente)
 );
-
 
 CREATE TABLE Medida(
 idMedida INT AUTO_INCREMENT,
@@ -139,4 +136,3 @@ FOREIGN KEY (fkComponente) REFERENCES Componente(idComponente),
 FOREIGN KEY (fkSetup) REFERENCES Setup(idSetup),
 PRIMARY KEY(idMedida,fkComponente, fkSetup)
 );
-
