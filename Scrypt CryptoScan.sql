@@ -1,4 +1,4 @@
-CREATE DATABASE CryptoScan;
+CREATE DATABASE IF NOT EXISTS CryptoScan;
 USE CryptoScan;
 
 CREATE TABLE Token (
@@ -123,7 +123,7 @@ unidadeComponente VARCHAR(45),
 totalComponente FLOAT,
 fkComponente INT,
 FOREIGN KEY (fkComponente) REFERENCES componente (idComponente),
-PRIMARY KEY (idLimite , fkComponente)
+PRIMARY KEY (idUnidadeComponente, fkComponente)
 );
 
 CREATE TABLE Medida(
