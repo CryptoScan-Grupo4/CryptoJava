@@ -63,7 +63,11 @@
                 <configuration>
                     <archive>
                         <manifest>
+<<<<<<< HEAD
                             <mainClass>Medida.TesteSistema</mainClass>
+=======
+                            <mainClass>sistemaCaptura.AppHistorico</mainClass>
+>>>>>>> 8296194bbe1460da6f79a7f9cbf854cda41792b6
                         </manifest>
                     </archive>
                 </configuration>
@@ -77,7 +81,11 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
+<<<<<<< HEAD
                             <mainClass>Medida.TesteSistema</mainClass>
+=======
+                            <mainClass>sistemaCaptura.AppHistorico</mainClass>
+>>>>>>> 8296194bbe1460da6f79a7f9cbf854cda41792b6
                         </manifest>
                     </archive>
                 </configuration>
