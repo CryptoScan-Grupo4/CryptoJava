@@ -63,7 +63,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>sistemaCaptura.AppHistorico</mainClass>
+                            <mainClass>Medida.TesteSistema</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -77,7 +77,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>sistemaCaptura.AppHistorico</mainClass>
+                            <mainClass>Medida.TesteSistema</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

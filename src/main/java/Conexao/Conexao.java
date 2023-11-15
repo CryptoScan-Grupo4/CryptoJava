@@ -12,7 +12,7 @@ public class Conexao {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/CryptoScan");
-        dataSource.setUsername("aluno");
+        dataSource.setUsername("root");
         dataSource.setPassword("aluno");
 
         conexaoDoBanco = new JdbcTemplate(dataSource);
